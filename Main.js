@@ -1,24 +1,13 @@
-// ==UserScript==
-// @name         Gimkit Answer Revealer
-// @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  Reveals answers on Gimkit
-// @author       Your Name
-// @match        *://www.gimkit.com/*
-// @grant        none
-// ==/UserScript==
+# Gimkit Answer Revealer
 
 (function() {
-    'use strict';
-
-    const revealAnswers = () => {
-        const answers = document.querySelectorAll('.answer');
-        answers.forEach(answer => {
-            answer.style.display = 'block';
-            answer.style.opacity = '1';
-        });
+    const originalFetch = window.fetch;
+    window.fetch = async function(...args) {
+        const response = await originalFetch(...args);
+        if (response.url.includes('gimkit.com/api/')) {
+            const data = await response.json();
+            console.log('Gimkit Answers:', data);
+        }
+        return response;
     };
-
-    const observer = new MutationObserver(revealAnswers);
-    observer.observe(document.body, { childList: true, subtree: true });
 })();
