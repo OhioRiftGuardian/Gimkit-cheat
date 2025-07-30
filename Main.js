@@ -1,13 +1,22 @@
-# Gimkit Answer Revealer
+// ==UserScript==
+// @name         Gimkit Answer Revealer
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  Reveals answers on Gimkit
+// @author       You
+// @match        *://www.gimkit.com/*
+// @grant        none
+// ==/UserScript==
 
 (function() {
-    const originalFetch = window.fetch;
-    window.fetch = async function(...args) {
-        const response = await originalFetch(...args);
-        if (response.url.includes('gimkit.com/api/')) {
-            const data = await response.json();
-            console.log('Gimkit Answers:', data);
-        }
-        return response;
+    'use strict';
+
+    const revealAnswers = () => {
+        const answers = document.querySelectorAll('.answer'); // Adjust selector as needed
+        answers.forEach(answer => {
+            console.log(answer.innerText); // Logs the answer to the console
+        });
     };
+
+    setInterval(revealAnswers, 5000); // Adjust interval as needed
 })();
